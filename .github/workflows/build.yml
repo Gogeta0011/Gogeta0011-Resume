@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- Build PDF from LaTeX ---
+      # --- Build PDF from LaTeX in repo root ---
       - name: Compile LaTeX to PDF
         uses: xu-cheng/latex-action@v3
         with:
@@ -30,41 +30,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y tex4ht texlive texlive-latex-extra
-          echo "htlatex location:"
           command -v htlatex
-          htlatex --version || true
 
-      # --- Build HTML using htlatex ---
-      - name: Compile LaTeX to HTML
+      # --- Build HTML in a writable folder ---
+      - name: Compile LaTeX to HTML (in site/)
         run: |
+          rm -rf site
           mkdir -p site
-          # Build HTML in repo root (htlatex writes outputs next to the .tex)
-          htlatex resume.tex "html5" " -cunihtf -utf8" "-d site/"
+          cp resume.tex site/
 
-          # Ensure Pages entry point
-          if [ -f site/resume.html ]; then
-            cp site/resume.html site/index.html
-          elif [ -f site/resume.htm ]; then
-            cp site/resume.htm site/index.html
-          fi
-
-          # Copy PDF into the site folder too
-          cp resume.pdf site/resume.pdf
-
-      # --- Commit resume.pdf back to main (optional) ---
-      - name: Commit PDF back to repo
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add resume.pdf
-          git diff --cached --quiet && exit 0
-          git commit -m "Auto-update resume PDF"
-          git push
-
-      # --- Deploy HTML to gh-pages branch ---
-      - name: Deploy to GitHub Pages (gh-pages)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          publish_branch: gh-pages
+          cd site
+          htlatex
