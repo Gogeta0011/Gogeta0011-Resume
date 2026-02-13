@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "**.tex"
+      - ".github/workflows/build.yml"
   workflow_dispatch:
 
 permissions:
@@ -12,42 +13,43 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1. Build the PDF
+      # 1. Build the PDF using the reliable LaTeX container
       - name: Compile LaTeX to PDF
         uses: xu-cheng/latex-action@v3
         with:
           root_file: resume.tex
           latexmk_use_xelatex: true
 
-      # 2. Convert PDF to a high-quality Image for the README
+      # 2. Convert PDF to a high-quality Image (PNG) for the README
+      # We use Ghostscript which is standard on Ubuntu runners
       - name: Convert PDF to PNG Preview
         run: |
           sudo apt-get update
           sudo apt-get install -y ghostscript
-          # Converts the first page of the PDF to a high-res PNG
-          gs -dNOPAUSE -sDEVICE=png16m -r300 -dFirstPage=1 -dLastPage=1 -sOutputFile=resume-preview.png -dBATCH resume.pdf
+          gs -dNOPAUSE -sDEVICE=png16m -r150 -dFirstPage=1 -dLastPage=1 -sOutputFile=resume-preview.png -dBATCH resume.pdf
 
-      # 3. Create a simple HTML for the background
-      - name: Prepare HTML
+      # 3. Prepare the site folder for GitHub Pages
+      - name: Prepare Site Folder
         run: |
           mkdir -p site
           cp resume.pdf site/
-          # Create a basic redirect or view page
-          echo "<html><body><embed src='resume.pdf' width='100%' height='100%' type='application/pdf'></body></html>" > site/index.html
+          # Create a simple HTML index that displays the PDF
+          echo "<html><head><title>Resume</title></head><body style='margin:0'><embed src='resume.pdf' width='100%' height='100%'></body></html>" > site/index.html
 
-      # 4. Commit the PDF and the PNG Preview back to the repo
-      - name: Commit Files
+      # 4. Commit the PDF and PNG back to your main branch
+      - name: Commit Updated Files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add resume.pdf resume-preview.png
-          git diff --cached --quiet || (git commit -m "Update resume files and preview" && git push)
+          git diff --cached --quiet || (git commit -m "Auto-update resume and preview image" && git push)
 
-      # 5. Deploy the PDF/HTML to GitHub Pages
+      # 5. Deploy the web version to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
