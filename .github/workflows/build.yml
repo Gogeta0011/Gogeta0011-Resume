@@ -25,27 +25,30 @@ jobs:
           root_file: resume.tex
           latexmk_use_xelatex: true
 
-      # --- Install TeX4ht / make4ht for HTML build ---
-      - name: Install TeX4ht (make4ht)
+      # --- Install TeX4ht tools (htlatex) for HTML build ---
+      - name: Install TeX4ht (htlatex)
         run: |
           sudo apt-get update
           sudo apt-get install -y tex4ht texlive texlive-latex-extra
-          echo "make4ht location:"
-          command -v make4ht
-          make4ht --version || true
+          echo "htlatex location:"
+          command -v htlatex
+          htlatex --version || true
 
-      # --- Build HTML site from LaTeX ---
+      # --- Build HTML using htlatex ---
       - name: Compile LaTeX to HTML
         run: |
           mkdir -p site
-          make4ht -u -d site resume.tex "html5"
+          # Build HTML in repo root (htlatex writes outputs next to the .tex)
+          htlatex resume.tex "html5" " -cunihtf -utf8" "-d site/"
 
-          # Make Pages entry point
+          # Ensure Pages entry point
           if [ -f site/resume.html ]; then
             cp site/resume.html site/index.html
+          elif [ -f site/resume.htm ]; then
+            cp site/resume.htm site/index.html
           fi
 
-          # Copy PDF into the site folder (so the HTML page can link to it)
+          # Copy PDF into the site folder too
           cp resume.pdf site/resume.pdf
 
       # --- Commit resume.pdf back to main (optional) ---
