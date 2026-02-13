@@ -1,10 +1,9 @@
-name: Build Resume (PDF + HTML) and Deploy Pages
+name: Build Resume and Update Preview
 
 on:
   push:
     paths:
       - "**.tex"
-      - ".github/workflows/build.yml"
   workflow_dispatch:
 
 permissions:
@@ -13,39 +12,42 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- 1. Build PDF (Uses the high-quality LaTeX container) ---
+      # 1. Build the PDF
       - name: Compile LaTeX to PDF
         uses: xu-cheng/latex-action@v3
         with:
           root_file: resume.tex
           latexmk_use_xelatex: true
 
-      # --- 2. Build HTML (Uses Pandoc - Fast & Pre-installed) ---
-      - name: Compile LaTeX to HTML via Pandoc
+      # 2. Convert PDF to a high-quality Image for the README
+      - name: Convert PDF to PNG Preview
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghostscript
+          # Converts the first page of the PDF to a high-res PNG
+          gs -dNOPAUSE -sDEVICE=png16m -r300 -dFirstPage=1 -dLastPage=1 -sOutputFile=resume-preview.png -dBATCH resume.pdf
+
+      # 3. Create a simple HTML for the background
+      - name: Prepare HTML
         run: |
           mkdir -p site
-          # Pandoc handles fontawesome and standard packages gracefully
-          pandoc resume.tex -s -o site/index.html
-          
-          # Copy the PDF into the site folder so it's downloadable
-          cp resume.pdf site/resume.pdf
+          cp resume.pdf site/
+          # Create a basic redirect or view page
+          echo "<html><body><embed src='resume.pdf' width='100%' height='100%' type='application/pdf'></body></html>" > site/index.html
 
-      # --- 3. Commit PDF back to main branch ---
-      # This ensures your repo always shows the latest PDF
-      - name: Commit PDF back to repo
+      # 4. Commit the PDF and the PNG Preview back to the repo
+      - name: Commit Files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add resume.pdf
-          git diff --cached --quiet || (git commit -m "Auto-update resume PDF" && git push)
+          git add resume.pdf resume-preview.png
+          git diff --cached --quiet || (git commit -m "Update resume files and preview" && git push)
 
-      # --- 4. Deploy to GitHub Pages ---
-      # This hosts your resume at https://<username>.github.io/<repo>/
+      # 5. Deploy the PDF/HTML to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
