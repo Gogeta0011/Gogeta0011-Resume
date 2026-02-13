@@ -40,4 +40,32 @@ jobs:
           cp resume.tex site/
 
           cd site
-          htlatex
+          htlatex resume.tex "html5" " -cunihtf -utf8"
+
+          # Pages entry point
+          if [ -f resume.html ]; then
+            cp resume.html index.html
+          elif [ -f resume.htm ]; then
+            cp resume.htm index.html
+          fi
+
+          # Put the PDF in the site folder too
+          cp ../resume.pdf ./resume.pdf
+
+      # --- Commit resume.pdf back to main (optional) ---
+      - name: Commit PDF back to repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add resume.pdf
+          git diff --cached --quiet && exit 0
+          git commit -m "Auto-update resume PDF"
+          git push
+
+      # --- Deploy HTML to gh-pages branch ---
+      - name: Deploy to GitHub Pages (gh-pages)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
