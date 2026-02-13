@@ -1,0 +1,63 @@
+name: Build Resume (PDF + HTML) and Deploy Pages
+
+on:
+  push:
+    paths:
+      - "**.tex"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Build PDF
+      - name: Compile LaTeX to PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+
+      # Install tools for HTML build
+      - name: Install TeX4ht
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make4ht texlive-tex4ht
+
+      # Build HTML (TeX -> HTML)
+      - name: Compile LaTeX to HTML
+        run: |
+          mkdir -p site
+          make4ht -u -d site resume.tex "html5"
+
+          # Ensure Pages has an entry point
+          if [ -f site/resume.html ]; then
+            cp site/resume.html site/index.html
+          fi
+
+          # Also copy PDF into the site (so the page can link to it)
+          cp resume.pdf site/resume.pdf
+
+      # Commit resume.pdf back to main (optional; remove if you don't want auto-commits)
+      - name: Commit PDF back to repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add resume.pdf
+          git diff --cached --quiet && exit 0
+          git commit -m "Auto-update resume PDF"
+          git push
+
+      # Deploy the HTML site to gh-pages
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
