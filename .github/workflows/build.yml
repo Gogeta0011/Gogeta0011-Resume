@@ -25,39 +25,8 @@ jobs:
           root_file: resume.tex
           latexmk_use_xelatex: true
 
-      # --- Install TeX4ht (provides make4ht) for HTML build ---
-      - name: Install TeX4ht (HTML builder)
+      # --- Install TeX4ht / make4ht for HTML build ---
+      - name: Install make4ht (TeX4ht)
         run: |
           sudo apt-get update
-          sudo apt-get install -y tex4ht texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra
-
-      # --- Build HTML site from LaTeX ---
-      - name: Compile LaTeX to HTML
-        run: |
-          mkdir -p site
-          make4ht -u -d site resume.tex "html5"
-
-          # Make Pages entry point
-          if [ -f site/resume.html ]; then
-            cp site/resume.html site/index.html
-          fi
-
-          # Copy PDF into the site folder (so the HTML page can link to it)
-          cp resume.pdf site/resume.pdf
-
-      # --- Commit resume.pdf back to main (optional) ---
-      - name: Commit PDF back to repo
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add resume.pdf
-          git diff --cached --quiet && exit 0
-          git commit -m "Auto-update resume PDF"
-          git push
-
-      # --- Deploy HTML to gh-pages branch ---
-      - name: Deploy to GitHub Pages (gh-pages)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          sudo apt-get install -y texliv
