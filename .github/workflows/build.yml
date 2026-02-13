@@ -20,7 +20,7 @@ jobs:
 
       # --- Build PDF from LaTeX ---
       - name: Compile LaTeX to PDF
-      - uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: resume.tex
           latexmk_use_xelatex: true
@@ -61,4 +61,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
-          publish_branch: gh-pages
