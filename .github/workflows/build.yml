@@ -47,7 +47,16 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add resume.pdf resume-preview.png
-          git diff --cached --quiet || (git commit -m "Auto-update resume and preview image" && git push)
+          
+          # Check if there are actually changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update resume and preview image"
+            # Pull latest changes to avoid "rejected" error, then push
+            git pull --rebase origin main
+            git push origin main
+          fi
 
       # 5. Deploy the web version to GitHub Pages
       - name: Deploy to GitHub Pages
