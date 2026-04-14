@@ -1,108 +1,95 @@
 \documentclass[letterpaper,11pt]{article}
 
 \usepackage[margin=0.4in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[default]{sourcesanspro}
 \usepackage{titlesec}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fontawesome5}
-\usepackage{tabularx}
-\usepackage{ragged2e}
-\usepackage{ragged2e}
-
-
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true, urlcolor={blue!70!black}, linkcolor={blue!70!black}]{hyperref}
 
 \setlength{\parindent}{0pt}
-\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=*}
+\setlength{\parskip}{0pt}
+
+\setlist[itemize]{
+  noitemsep,
+  topsep=0pt,
+  partopsep=0pt,
+  parsep=0pt,
+  itemsep=0pt,
+  leftmargin=1.2em
+}
 
 \titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
-\titlespacing*{\section}{0pt}{8pt}{6pt}
+\titlespacing*{\section}{0pt}{4pt}{2pt}
 
 \pagestyle{empty}
 
 \begin{document}
 
-
-%====================
-% Header
-%====================
+%--- Header ---%
 \begin{center}
-    {
-        \huge \textbf{MIR YASEEN ALI}}\\ \vspace{6pt}
-        {\small
-        \faUser*\ \href{https://d3mte3hn7uzxb.cloudfront.net}{MYA}\quad
-        \faEnvelope\ \href{mailto:mir.yaseen29343@gmail.com}{mir.yaseen29343@gmail.com} \quad
-        \faPhone* \href{tel:+16303316311}{(630) 331-6311} \quad
-        \faLinkedin\ \href{https://linkedin.com/in/yaseen0011}{yaseen0011} \quad
-        \faGithub\ \href{https://github.com/Gogeta0011}{Gogeta0011} \quad
-        \faMapMarker* Illinois, USA
-    }
+  {\LARGE\textbf{MIR YASEEN ALI}}\\[2pt]
+  {
+    \href{https://d3mte3hn7uzxb.cloudfront.net}{Portfolio} \textbar\
+    (630) 331-6311 \textbar\
+    \href{mailto:mir.yaseen29343@gmail.com}{mir.yaseen29343@gmail.com}
+    \\
+    \href{https://linkedin.com/in/yaseen0011}{linkedin.com/in/yaseen0011} \textbar\
+    \href{https://github.com/Gogeta0011}{github.com/Gogeta0011} \textbar\
+    U.S. Permanent Resident
+  }
 \end{center}
 
-%====================
-% Professional Summary
-%====================
-\section{PROFESSIONAL SUMMARY}
-Entry-level Software and Cloud Engineer with a Computer Science degree and hands-on experience building, deploying,
-and troubleshooting backend and cloud-based projects from start to finish in real setups. Comfortable working with
-APIs, securing access, and fixing deployment issues through testing, debugging, and simple documentation notes quickly. U.S.
-permanent resident (Green Card holder)and authorized to work in the U.S., and available immediately.
-
-
-
-
-%====================
-% Technical Skills
-%====================
+%--- Technical Skills ---%
 \section{TECHNICAL SKILLS}
-\textbf{Cloud \& Systems:} AWS (S3, CloudFront, IAM), Linux (Ubuntu), TCP/IP, DNS, DHCP\\
+\textbf{Cloud \& Infrastructure:} AWS (S3, CloudFront, IAM), Linux (Ubuntu), TCP/IP, DNS, DHCP, Docker (familiar)\\
+\textbf{DevOps \& CI/CD:} GitHub Actions, Git, Git workflows, Agile Scrum\\
 \textbf{Programming Languages:} Python, Java, C, C++, SQL (MySQL), JavaScript, HTML/CSS\\
-\textbf{Developer Tools:} Git, GitHub, VS Code, OpenCV, MediaPipe
+\textbf{Developer Tools:} VS Code, OpenCV, MediaPipe\\
+\textbf{Concepts \& Protocols:} REST APIs, OAuth 2.0, Role-Based Access Control (RBAC), JWT, TLS, HTTPS, CRUD, MVC
 
-%====================
-% Certifications
-%====================
+%--- Certifications ---%
 \section{CERTIFICATIONS}
-\faCubes \href{https://www.credly.com/badges/338f9986-645d-4cdf-bdc5-0cd27b5a0535} {\textbf{ AWS Certified Cloud Practitioner}} {\hfill Issued Jan 2026 · Expires Jan 2029}
+\textbf{AWS Certified Cloud Practitioner} \href{https://www.credly.com/badges/338f9986-645d-4cdf-bdc5-0cd27b5a0535}{(verify)} \hfill Issued Jan 2026 -- Expires Jan 2029
 
-%====================
-% Engineering Projects
-%====================
+%--- Engineering Projects ---%
 \section{ENGINEERING PROJECTS}
-
-\textbf{Cloud Portfolio Platform} \textbar\ AWS (S3, CloudFront), HTML, CSS, JavaScript \hfill January 2026
+\noindent\textbf{Cloud Portfolio Platform} \href{https://d3mte3hn7uzxb.cloudfront.net}{[website]} \href{https://github.com/Gogeta0011/Portfolio-Website}{[github]} \textbar\ AWS (S3, CloudFront, IAM), GitHub Actions, JavaScript \hfill January 2026
 \begin{itemize}
-    \item Deployed my portfolio site using S3 for hosting and CloudFront for delivery, and tested it across browsers/devices to make sure pages load consistently and the layout stays clean.
-    \item Kept the S3 bucket private and served content through CloudFront using Origin Access Control and a bucket policy, double-checking that direct S3 access is blocked the way it should be.
-    \item Set up HTTPS behavior, basic caching rules, and billing alerts (Budgets), then fixed issues like 403 errors and cache problems by adjusting policies and distribution settings until it stayed stable.
+  \item Deployed and maintained a cloud-hosted site on AWS using S3 and CloudFront, configuring infrastructure for high availability, consistent delivery, and secure access control.
+  \item Automated deployment workflows using GitHub Actions, reducing manual steps and ensuring repeatable, reliable releases across updates.
+  \item Enforced security best practices using Origin Access Control, scoped IAM bucket policies, HTTPS-only behavior, and billing alerts to monitor infrastructure costs.
+\end{itemize}
+\noindent\textbf{Secure File Management System} \href{https://github.com/Gogeta0011/Secure-File-Management}{[github]} \textbar\ Java, MySQL \hfill November 2025
+\begin{itemize}
+  \item Built a Java backend with role-based access control (RBAC) for multi-user file management, enforcing least-privilege permissions across read, upload, edit, and delete operations.
+  \item Designed a normalized MySQL schema for users, roles, and file metadata with transaction-based updates to ensure data integrity and reliability under concurrent operations.
+  \item Implemented input validation and authentication checks around sensitive actions to reduce attack surface and improve overall system security posture.
+\end{itemize}
+\noindent\textbf{Ice Cream Shop Analytics Dashboard} \href{https://github.com/Gogeta0011/Ice-Cream-Shop-Analytics-Dashboard}{[github]} \textbar\ JavaScript, HTML/CSS, Python \hfill March 2026
+\begin{itemize}
+  \item Built a full-stack web dashboard consolidating sales, inventory, and staffing data from multiple sources to surface business insights in a single view.
+  \item Designed a data pipeline to ingest and normalize inputs from different formats, laying groundwork for predictive features such as next-day sales forecasting and staffing recommendations.
+  \item Collaborated with a stakeholder throughout development to gather requirements, iterate on the UI, and align the solution to real operational needs.
+\end{itemize}
+\noindent\textbf{GmailBillTracker} \href{https://github.com/Gogeta0011/GmailBillTracker}{[github]} \textbar\ Python, Gmail API, OAuth 2.0 \hfill August 2025
+\begin{itemize}
+  \item Automated processing of 100+ emails via the Gmail API to extract and structure billing data including invoices, receipts, and payment confirmations.
+  \item Implemented OAuth 2.0 authentication and keyword-based filtering, applying security best practices for API access and reducing noise in results.
+  \item Handled edge cases including forwarded threads, inconsistent formatting, and duplicates, improving reliability and output quality of the pipeline.
+\end{itemize}
+\noindent\textbf{Hand Gesture Recognition System} \href{https://github.com/Gogeta0011/Hand-Gestures}{[github]} \textbar\ Python, OpenCV, MediaPipe \hfill July 2025
+\begin{itemize}
+  \item Built a real-time computer vision pipeline using OpenCV and MediaPipe to detect and classify hand gestures from a live camera feed with low latency.
+  \item Tuned detection thresholds and optimized frame processing to reduce false triggers and maintain stable performance across varied lighting and camera distances.
+  \item Mapped gesture outputs to system actions, demonstrating end-to-end integration from sensor input to application-level response.
 \end{itemize}
 
-\textbf{Secure File Management System} \textbar\ Java, MySQL \hfill November 2025
-\begin{itemize}
-    \item Built a Java backend where multiple users can manage files, using role-based access so permissions are clear for reading, uploading, editing, and deleting.
-    \item Added authentication and authorization checks around sensitive actions and designed MySQL tables for users, roles, and file metadata so the data stays structured and easy to maintain.
-    \item Improved reliability with input validation and transaction-based updates to reduce data issues during concurrent actions and repeated operations.
-\end{itemize}
-
-\textbf{GmailBillTracker} \textbar\ Python, Gmail API \hfill August 2025
-\begin{itemize}
-    \item Built an automation script in Python that scans and processes 100+ emails through the Gmail API to pull out billing-related messages like invoices, receipts, and confirmations.
-    \item Implemented OAuth 2.0 and filtering using common senders and keywords to reduce noise and keep results focused on finance-related emails.
-    \item Exported structured output for easier review and handled edge cases like forwarded threads, inconsistent formatting, and duplicate emails across long reply chains.
-\end{itemize}
-
-\textbf{Hand Gesture Recognition System} \textbar\ Python, OpenCV, MediaPipe \hfill July 2025
-\begin{itemize}
-    \item Built a real-time hand tracking pipeline using OpenCV and MediaPipe to detect and track hand landmarks from a live camera feed during continuous use.
-    \item Used landmark movement to recognize a set of gestures and mapped them to basic actions as a touchless control demo with simple feedback.
-    \item Tuned thresholds and frame processing to reduce false triggers and keep it responsive across different lighting, camera angles, and normal room distance.
-\end{itemize}
-
-%====================
-% Education
-%====================
+%--- Education ---%
 \section{EDUCATION}
-\textbf{Bachelor of Engineering in Computer Science and Engineering}  \hfill Graduated in June 2025\\
-Jawaharlal Nehru Technological University, Hyderabad  \hfill Telangana, India\\
+\textbf{Bachelor of Technology (B.Tech) in Computer Science and Engineering (CSE)} \hfill Graduated June 2025\\
+Jawaharlal Nehru Technological University, Hyderabad \hfill Telangana, India\\
 \textbf{Relevant Coursework:} Cloud Computing, Operating Systems, Computer Networks, Software Engineering, Database Management Systems, Data Structures \& Algorithms
 
 \end{document}
